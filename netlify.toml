@@ -1,0 +1,22 @@
+[build]
+  command = "node build.mjs"
+  publish = "dist"
+
+[build.environment]
+  # O varredor de segredos do Netlify acha a chave anon no dist/config.js
+  # e derruba o build. É falso positivo: num site estático a chave anon é
+  # pública por construção, e quem protege os dados é a RLS por dono do
+  # Supabase. Aqui ficam só NOMES de variável e CAMINHO de arquivo —
+  # nenhum valor, porque este arquivo vai pro git.
+  SECRETS_SCAN_OMIT_KEYS  = "SUPABASE_URL,SUPABASE_ANON_KEY"
+  SECRETS_SCAN_OMIT_PATHS = "dist/config.js"
+
+# Cabeçalhos de segurança. Não protegem a chave — nada protege chave em
+# front-end — mas impedem que o site seja embutido em iframe de terceiro
+# e que o navegador adivinhe tipo de conteúdo.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"

@@ -1,0 +1,11 @@
+{
+  "name": "mpmax",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs",
+    "dev": "node build.mjs && node --run serve",
+    "serve": "node -e \"const h=require('node:http'),f=require('node:fs'),p=require('node:path');h.createServer((q,s)=>{let u=q.url.split('?')[0];if(u==='/')u='/index.html';const a=p.join('dist',u);if(!f.existsSync(a)){s.writeHead(404);return s.end('404')}const t={'.html':'text/html','.js':'text/javascript','.css':'text/css'}[p.extname(a)]||'text/plain';s.writeHead(200,{'Content-Type':t+'; charset=utf-8'});f.createReadStream(a).pipe(s)}).listen(8000,()=>console.log('http://localhost:8000'))\""
+  }
+}
